@@ -11,7 +11,7 @@ import { Env, ChatMessage } from "./types";
 
 // Model ID for Workers AI model
 // https://developers.cloudflare.com/workers-ai/models/
-const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8";
+const MODEL_ID = "@cf/zai-org/glm-5.2";
 
 // Default system prompt
 const SYSTEM_PROMPT =
@@ -69,7 +69,7 @@ async function handleChatRequest(
 
 		const inputs = {
 			messages,
-			max_tokens: 1024,
+			max_tokens: 2048,
 			stream: true,
 		} satisfies AiTextGenerationInput & { stream: true };
 
