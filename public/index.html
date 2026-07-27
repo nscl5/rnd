@@ -3,17 +3,17 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>LLM Chat App</title>
-		<style>
+		<title>NLP Chat</title>
+	<style>
 			:root {
 				--primary-color: #f6821f;
 				--primary-hover: #e67e22;
-				--light-bg: #f9fafb;
-				--border-color: #e5e7eb;
-				--text-color: #1f2937;
-				--text-light: #6b7280;
-				--user-msg-bg: #fff2e6;
-				--assistant-msg-bg: #f3f4f6;
+				--light-bg: #121212;
+				--border-color: #2d2d2d;
+				--text-color: #e0e0e0;
+				--text-light: #9e9e9e;
+				--user-msg-bg: #1e293b;
+				--assistant-msg-bg: #18181b;
 			}
 
 			* {
@@ -28,6 +28,7 @@
 					Cantarell, sans-serif;
 				line-height: 1.6;
 				color: var(--text-color);
+				background-color: #0a0a0a;
 				max-width: 800px;
 				margin: 0 auto;
 				padding: 1rem;
@@ -53,6 +54,7 @@
 				border: 1px solid var(--border-color);
 				border-radius: 8px;
 				overflow: hidden;
+				background-color: var(--light-bg);
 			}
 
 			.chat-messages {
@@ -67,6 +69,7 @@
 				padding: 0.75rem;
 				border-radius: 8px;
 				max-width: 80%;
+				border: 1px solid var(--border-color);
 			}
 
 			.message p {
@@ -90,17 +93,24 @@
 				display: flex;
 				padding: 0.75rem;
 				border-top: 1px solid var(--border-color);
-				background-color: white;
+				background-color: #141414;
 			}
 
 			#user-input {
 				flex: 1;
 				padding: 0.75rem;
 				border: 1px solid var(--border-color);
+				background-color: #1e1e1e;
+				color: var(--text-color);
 				border-radius: 4px;
 				font-family: inherit;
 				resize: none;
 				min-height: 44px;
+			}
+
+			#user-input:focus {
+				outline: none;
+				border-color: var(--primary-color);
 			}
 
 			#send-button {
@@ -128,6 +138,7 @@
 				font-style: italic;
 				color: var(--text-light);
 				padding: 1rem;
+				background-color: var(--light-bg);
 			}
 
 			.typing-indicator.visible {
@@ -144,15 +155,15 @@
 	</head>
 	<body>
 		<header>
-			<h1>Cloudflare AI Chat</h1>
-			<p>Powered by Cloudflare Workers AI</p>
+			<h1>Artificial intelligence</h1>
+			<p>Freedom to Dream</p>
 		</header>
 
 		<div class="chat-container">
 			<div id="chat-messages" class="chat-messages">
 				<div class="message assistant-message">
 					<p>
-						Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can
+						Hi sweetie, How can
 						I help you today?
 					</p>
 				</div>
@@ -174,7 +185,7 @@
 		</div>
 
 		<footer>
-			<p>Cloudflare Workers AI Chat Template &copy; 2025</p>
+			<p> <b>Dì</b> — Natural language processing &copy; 2026-2027</p>
 		</footer>
 
 		<!-- Chat app script -->
