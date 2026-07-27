@@ -1,9 +1,3 @@
-/**
- * LLM Chat App Frontend
- *
- * Handles the chat UI interactions and communication with the backend API.
- */
-
 // DOM elements
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
@@ -15,7 +9,7 @@ let chatHistory = [
 	{
 		role: "assistant",
 		content:
-			"Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can I help you today?",
+			"Hi sweetie, I am a GLM large language model. How can I assist you today??",
 	},
 ];
 let isProcessing = false;
@@ -26,11 +20,13 @@ userInput.addEventListener("input", function () {
 	this.style.height = this.scrollHeight + "px";
 });
 
-// Send message on Enter (without Shift)
+// Handle keydown: Enter adds a new line naturally, Ctrl+Enter or Cmd+Enter can send if desired
 userInput.addEventListener("keydown", function (e) {
-	if (e.key === "Enter" && !e.shiftKey) {
-		e.preventDefault();
-		sendMessage();
+	if (e.key === "Enter") {
+		if (e.ctrlKey || e.metaKey) {
+			e.preventDefault();
+			sendMessage();
+		}
 	}
 });
 
@@ -100,7 +96,7 @@ async function sendMessage() {
 		let responseText = "";
 		let buffer = "";
 		const flushAssistantText = () => {
-			assistantTextEl.textContent = responseText;
+			assistantMessageEl.innerHTML = formatMessageContent(responseText);
 			chatMessages.scrollTop = chatMessages.scrollHeight;
 		};
 
@@ -109,7 +105,6 @@ async function sendMessage() {
 			const { done, value } = await reader.read();
 
 			if (done) {
-				// Process any remaining complete events in buffer
 				const parsed = consumeSseEvents(buffer + "\n\n");
 				for (const data of parsed.events) {
 					if (data === "[DONE]") {
@@ -117,7 +112,6 @@ async function sendMessage() {
 					}
 					try {
 						const jsonData = JSON.parse(data);
-						// Handle both Workers AI format (response) and OpenAI format (choices[0].delta.content)
 						let content = "";
 						if (
 							typeof jsonData.response === "string" &&
@@ -138,7 +132,6 @@ async function sendMessage() {
 				break;
 			}
 
-			// Decode chunk
 			buffer += decoder.decode(value, { stream: true });
 			const parsed = consumeSseEvents(buffer);
 			buffer = parsed.buffer;
@@ -150,7 +143,6 @@ async function sendMessage() {
 				}
 				try {
 					const jsonData = JSON.parse(data);
-					// Handle both Workers AI format (response) and OpenAI format (choices[0].delta.content)
 					let content = "";
 					if (
 						typeof jsonData.response === "string" &&
@@ -196,12 +188,37 @@ async function sendMessage() {
 }
 
 /**
+ * Basic Markdown formatting for code blocks, inline code, and bold text
+ */
+function formatMessageContent(content) {
+	// Escape HTML to prevent injection
+	let safeContent = content
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;");
+
+	// Handle code blocks with ```
+	safeContent = safeContent.replace(/```([\s\S]*?)```/g, function(match, code) {
+		return `<pre><code>${code.trim()}</code></pre>`;
+	});
+
+	// Handle inline code with `
+	safeContent = safeContent.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+	// Handle bold text with **
+	safeContent = safeContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+	// Wrap in paragraph with preserved lines
+	return `<p>${safeContent.replace(/\n/g, '<br>')}</p>`;
+}
+
+/**
  * Helper function to add message to chat
  */
 function addMessageToChat(role, content) {
 	const messageEl = document.createElement("div");
 	messageEl.className = `message ${role}-message`;
-	messageEl.innerHTML = `<p>${content}</p>`;
+	messageEl.innerHTML = formatMessageContent(content);
 	chatMessages.appendChild(messageEl);
 
 	// Scroll to bottom
