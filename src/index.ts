@@ -9,44 +9,30 @@
  */
 import { Env, ChatMessage } from "./types";
 
-// Model ID for Workers AI model
-// https://developers.cloudflare.com/workers-ai/models/
-const MODEL_ID = "@cf/zai-org/glm-5.2";
-
-// Default system prompt
-const SYSTEM_PROMPT =
-	"You are a helpful, friendly assistant. Provide concise and accurate responses.";
+export interface Env {
+  AI: Ai;
+}
 
 export default {
-	/**
-	 * Main request handler for the Worker
-	 */
-	async fetch(
-		request: Request,
-		env: Env,
-		ctx: ExecutionContext,
-	): Promise<Response> {
-		const url = new URL(request.url);
+  async fetch(request, env): Promise<Response> {
 
-		// Handle static assets (frontend)
-		if (url.pathname === "/" || !url.pathname.startsWith("/api/")) {
-			return env.ASSETS.fetch(request);
-		}
+    const messages = [
+      { role: "system", content: "You are a friendly assistant" },
+      {
+        role: "user",
+        content: "What is the origin of the phrase Hello, World",
+      },
+    ];
 
-		// API Routes
-		if (url.pathname === "/api/chat") {
-			// Handle POST requests for chat
-			if (request.method === "POST") {
-				return handleChatRequest(request, env);
-			}
+    const stream = await env.AI.run("@cf/zai-org/glm-5.2", {
+      messages,
+      stream: true,
+    });
 
-			// Method not allowed for other request types
-			return new Response("Method not allowed", { status: 405 });
-		}
-
-		// Handle 404 for unmatched routes
-		return new Response("Not found", { status: 404 });
-	},
+    return new Response(stream, {
+      headers: { "content-type": "text/event-stream" },
+    });
+  },
 } satisfies ExportedHandler<Env>;
 
 /**
@@ -69,7 +55,7 @@ async function handleChatRequest(
 
 		const inputs = {
 			messages,
-			max_tokens: 2048,
+			max_tokens: 1024,
 			stream: true,
 		} satisfies AiTextGenerationInput & { stream: true };
 
