@@ -78,6 +78,33 @@
 				overflow-wrap: anywhere;
 			}
 
+			.message pre {
+				background-color: #0d1117;
+				border: 1px solid #30363d;
+				border-radius: 6px;
+				padding: 10px;
+				margin: 8px 0;
+				overflow-x: auto;
+				font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+				font-size: 0.9rem;
+				color: #e6edf3;
+			}
+
+			.message code {
+				font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+				background-color: rgba(110, 118, 129, 0.4);
+				padding: 0.2em 0.4em;
+				border-radius: 4px;
+				font-size: 85%;
+			}
+
+			.message pre code {
+				background-color: transparent;
+				padding: 0;
+				border: none;
+				color: inherit;
+			}
+
 			.user-message {
 				background-color: var(--user-msg-bg);
 				align-self: flex-end;
@@ -156,15 +183,15 @@
 	<body>
 		<header>
 			<h1>Artificial intelligence</h1>
-			<p>Freedom to Dream</p>
+			<p> </p>
 		</header>
 
 		<div class="chat-container">
 			<div id="chat-messages" class="chat-messages">
 				<div class="message assistant-message">
 					<p>
-						Hi sweetie, How can
-						I help you today?
+						Hello sweetie, I am a large language model.
+						How can I assist you today??
 					</p>
 				</div>
 			</div>
@@ -185,7 +212,7 @@
 		</div>
 
 		<footer>
-			<p> <b>Dì</b> — Natural language processing &copy; 2026-2027</p>
+			<p> <b>M.RND</b> — Natural language processing &copy; 2026-2027</p>
 		</footer>
 
 		<!-- Chat app script -->
